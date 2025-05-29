@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aind-metadata-mcp"
-description = "Generated from aind-library-template"
+description = "MCP server for AIND metadata"
 license = {text = "MIT"}
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [
     {name = "Allen Institute for Neural Dynamics"}
 ]
@@ -17,6 +17,14 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
+    "aind-data-access-api[docdb]>=1.2.1",
+    "mcp>=1.8.1",
+    "nest-asyncio>=1.6.0",
+    "python-dotenv>=1.1.0",
+    "metadata-chatbot>=0.5.1",
+    "langchain-core>=0.3.60",
+    "pydantic>=2.11.4",
+    "langchain-huggingface>=0.2.0",
 ]
 
 [project.optional-dependencies]
