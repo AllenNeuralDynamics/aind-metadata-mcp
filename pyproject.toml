@@ -17,7 +17,7 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
-    "aind-data-access-api[docdb]>=1.2.1",
+    "aind-data-access-api",
     "mcp>=1.8.1",
     "nest-asyncio>=1.6.0",
     "python-dotenv>=1.1.0",
