@@ -19,8 +19,6 @@ dynamic = ["version"]
 dependencies = [
     "aind-data-access-api",
     "mcp>=1.8.1",
-    "nest-asyncio>=1.6.0",
-    "python-dotenv>=1.1.0",
     "metadata-chatbot>=0.5.1",
     "langchain-core>=0.3.60",
     "pydantic>=2.11.4",
@@ -37,6 +35,9 @@ dev = [
     'Sphinx',
     'furo'
 ]
+
+[project.scripts]
+aind-metadata-mcp = "aind_metadata_mcp.data_access_server:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
