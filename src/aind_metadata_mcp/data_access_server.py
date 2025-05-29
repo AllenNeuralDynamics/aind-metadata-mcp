@@ -4,7 +4,7 @@ from mcp.server.fastmcp import FastMCP
 from aind_data_access_api.document_db import MetadataDbClient
 from metadata_chatbot.retrievers.docdb_retriever import DocDBRetriever
 
-from schema_context_retriever import SchemaContextRetriever
+from aind_metadata_mcp.schema_context_retriever import SchemaContextRetriever
 from typing import Literal
 
 mcp = FastMCP("aind_data_access")
@@ -259,7 +259,9 @@ def get_high_level_schema() -> str:
     return file_content
 
 
-if __name__ == "__main__":
-    # Initialize and run the server
-
+def main():
+    """Entry point for the MCP server"""
     mcp.run(transport='stdio')
+
+if __name__ == "__main__":
+    main()
