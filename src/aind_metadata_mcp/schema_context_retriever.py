@@ -1,6 +1,5 @@
 """DocDB retriever class that communicates with MongoDB"""
 
-import asyncio
 import logging
 from typing import Any, List, Optional
 
@@ -104,6 +103,7 @@ class SchemaContextRetriever(BaseRetriever):
         except Exception as e:
             print(e)
 
+# import asyncio
 # query = "subject procedures"
 
 
