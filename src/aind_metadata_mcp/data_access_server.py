@@ -3,6 +3,8 @@ from mcp.server.fastmcp import FastMCP
 
 from aind_data_access_api.document_db import MetadataDbClient
 from metadata_chatbot.retrievers.docdb_retriever import DocDBRetriever
+from pathlib import Path
+
 
 from aind_metadata_mcp.schema_context_retriever import SchemaContextRetriever
 from typing import Literal
@@ -243,7 +245,8 @@ def get_aind_data_access_api() -> str:
     Get context on how to use the AIND data access api to show users how to wrap
     tool calls 
     """
-    with open(r"src\aind_metadata_mcp\resources\aind_api_prompt.txt", 'r') as file:
+    resource_path = Path(__file__).parent / "resources" / "aind_api_prompt.txt"
+    with open(resource_path, 'r') as file:
         file_content = file.read()
     return file_content
 
@@ -254,7 +257,8 @@ def get_high_level_schema() -> str:
     This schema only has the parent nodes of each field and doesn't account for nesting.
     Useful for getting context on how to construct simple queries
     """
-    with open(r"src\aind_metadata_mcp\resources\high_level_schema.txt", 'r') as file:
+    resource_path = Path(__file__).parent / "resources" / "high_level_schema.txt"
+    with open(resource_path, 'r') as file:
         file_content = file.read()
     return file_content
 
