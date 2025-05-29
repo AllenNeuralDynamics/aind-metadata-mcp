@@ -2,7 +2,6 @@
 from mcp.server.fastmcp import FastMCP
 
 from aind_data_access_api.document_db import MetadataDbClient
-from metadata_chatbot.retrievers.docdb_retriever import DocDBRetriever
 from pathlib import Path
 
 
@@ -131,50 +130,50 @@ def aggregation_retrieval(agg_pipeline:list):
         message = template.format(type(ex).__name__, ex.args)
         return message
     
-@mcp.tool()
-async def retrieve_vectorized_assets(query: str, query_filter: dict):
-    """
-    WHEN TO USE THIS FUNCTION: 
-    - ONLY use for queries that mention a subject id or name (structured like experiment modality_subject_date)
-    - Simple field lookups on specific records (e.g., "What's the genotype of subject 678543?")
-    - Semantic similarity searches requiring understanding of content
-    - Complex questions about specific records needing contextual understanding
-    - Timeline reconstructions for individual subjects/experiments
-    - Questions that benefit from embedding-based similarity rather than exact matching
-    - Limited to top 5 most relevant documents, so use when precision > recall
+# @mcp.tool()
+# async def retrieve_vectorized_assets(query: str, query_filter: dict):
+#     """
+#     WHEN TO USE THIS FUNCTION: 
+#     - ONLY use for queries that mention a subject id or name (structured like experiment modality_subject_date)
+#     - Simple field lookups on specific records (e.g., "What's the genotype of subject 678543?")
+#     - Semantic similarity searches requiring understanding of content
+#     - Complex questions about specific records needing contextual understanding
+#     - Timeline reconstructions for individual subjects/experiments
+#     - Questions that benefit from embedding-based similarity rather than exact matching
+#     - Limited to top 5 most relevant documents, so use when precision > recall
 
-    NOT RECOMMENDED FOR:
-    - Any count based questions
-    - Retrievals that require a numerical answer
+#     NOT RECOMMENDED FOR:
+#     - Any count based questions
+#     - Retrievals that require a numerical answer
 
-    query filter instructions:
-    Step 1: Create Match Filter (MANDATORY)
-    Analyze the query to identify filterable fields (subject_id, name)
-    Construct a valid MongoDB $match stage as a Python dictionary
-    Format it as: {"$match": {...filter conditions...}}
-    NEVER skip this step - every response must include a match filter
-    Step 2: Determine Document Count
-    Only after creating a match filter, determine how many documents to retrieve:
+#     query filter instructions:
+#     Step 1: Create Match Filter (MANDATORY)
+#     Analyze the query to identify filterable fields (subject_id, name)
+#     Construct a valid MongoDB $match stage as a Python dictionary
+#     Format it as: {"$match": {...filter conditions...}}
+#     NEVER skip this step - every response must include a match filter
+#     Step 2: Determine Document Count
+#     Only after creating a match filter, determine how many documents to retrieve:
 
-    Field Recognition Guidelines:
-    Subject IDs: Any 6-digit number (like 678905, 654326) should be treated as a subject_id
+#     Field Recognition Guidelines:
+#     Subject IDs: Any 6-digit number (like 678905, 654326) should be treated as a subject_id
 
-    Even if the query refers to "mouse 657812" rather than "subject 657812"
-    Example filter: {"$match": {"subject_id": "657812"}}
-    Key Fields to Watch For:
+#     Even if the query refers to "mouse 657812" rather than "subject 657812"
+#     Example filter: {"$match": {"subject_id": "657812"}}
+#     Key Fields to Watch For:
 
-    subject_id (highest priority for filtering)
-    name (contains ONLY experiment modality, subject ID, and date)
-    Query: "Show me all SmartSPIM data from February 2023" Filter: {"$match": {"name": {"$regex": "SmartSPIM.*2023-02"}}}
+#     subject_id (highest priority for filtering)
+#     name (contains ONLY experiment modality, subject ID, and date)
+#     Query: "Show me all SmartSPIM data from February 2023" Filter: {"$match": {"name": {"$regex": "SmartSPIM.*2023-02"}}}
 
-    Query: "Tell me about mouse 608551's single-plane-ophys experiments" 
-    Filter: {"$match": {"subject_id": "608551"}}
-    """
-    retriever = DocDBRetriever(k=3)
-    documents = await retriever.aget_relevant_documents(
-        query=query, query_filter=query_filter
-    )
-    return documents
+#     Query: "Tell me about mouse 608551's single-plane-ophys experiments" 
+#     Filter: {"$match": {"subject_id": "608551"}}
+#     """
+#     retriever = DocDBRetriever(k=3)
+#     documents = await retriever.aget_relevant_documents(
+#         query=query, query_filter=query_filter
+#     )
+#     return documents
 
 @mcp.tool()
 async def retrieve_schema_context(query: str, 
