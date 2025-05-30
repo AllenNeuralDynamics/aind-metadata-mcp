@@ -189,7 +189,7 @@ async def retrieve_schema_context(query: str,
     field-specific requirements. 
     - Use when you need to understand what fields are available or how specific properties work.
     - Use cases:
-        - Building field selections (`\$project`)
+        - Building field selections (`$project`)
         - Understanding field types for queries
         - Checking required vs optional fields
         - Field-specific validation rules
@@ -197,7 +197,7 @@ async def retrieve_schema_context(query: str,
     - Search for schema definitions, enums, nested object structures, and reusable components. 
     - Use when you need to understand data models, allowed values, or complex nested structures.
     - Use cases:
-        - Working with enum values (`\$match` with specific values)
+        - Working with enum values (`$match` with specific values)
         - Understanding nested object structures
         - Looking up allowed values for fields
         - Complex data type definitions
