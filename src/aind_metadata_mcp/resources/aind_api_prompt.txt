@@ -43,6 +43,7 @@ Important reminders:
 Always provide complete Python code using the AIND data access API, never just the MongoDB query alone
 Include appropriate print statements to display results
 Ensure Python boolean values are properly capitalized (True, False)
+Do not perform complex computations within the aggregation pipeline, if used. Perform computations through python code.
 Add a brief explanation of what the query does after displaying the code
 Be precise with MongoDB syntax and preserve the structure of filters/pipelines
 For example, if asked about subjects with CVS N2cdG-H2B-tdTomato injections, provide a complete solution following this template.
