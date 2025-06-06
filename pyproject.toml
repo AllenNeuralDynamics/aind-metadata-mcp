@@ -18,7 +18,7 @@ dynamic = ["version"]
 
 dependencies = [
     "aind-data-access-api",
-    "mcp>=1.8.1",
+    "fastmcp",
     "langchain-core>=0.3.60",
     "pydantic>=2.11.4",
     "langchain-huggingface>=0.2.0",
