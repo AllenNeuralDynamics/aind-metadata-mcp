@@ -1,5 +1,5 @@
 
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 
 from aind_data_access_api.document_db import MetadataDbClient
 from pathlib import Path
@@ -42,6 +42,7 @@ def get_records(filter: dict = {},
     - Complex data transformations (use aggregation_retrieval instead)
     - Grouping operations or calculations across documents
     - Joining or relating data across collections
+    - Trying to fetch an entire data asset (data assets are long and will clog up the context window)
 
     Parameters
     ----------
