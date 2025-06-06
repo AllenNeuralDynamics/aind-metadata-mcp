@@ -1,3 +1,7 @@
+The graph below represents the structure of each metadata asset. 
+Use this as a reference to determine high level nesting structure for simple queries.
+Note that the actual schema includes more nesting that is not included in this schema.
+
 Metadata/
 ├── metadata_status
 ├── name (name of data asset, follows specific structure <modality>_<subject_id>_<date>)
@@ -168,3 +172,39 @@ Metadata/
     ├── wellness_reports: array
     ├── housing: object or null
     └── notes: string or null
+
+The quality_control schema defines how quality metrics are organized and evaluated for data assets:
+
+- Each data asset has an array of "evaluations"
+- Each evaluation contains:
+  - modality: The type of data (SPIM, ecephys, behavior, etc.)
+  - stage: When quality was assessed (Raw data, Processing, Analysis, Multi-asset)
+  - metrics: Array of individual measurements with name, value, and status history
+  - status: Overall Pass/Fail/Pending status of the evaluation
+Important quality_control query patterns:
+1. To query evaluation properties:
+   {"quality_control.evaluations": {"\$elemMatch": {<conditions>}}}
+
+2. To unwind and query individual evaluations:
+   [{\$unwind: "\$quality_control.evaluations"}, {\$match: {"quality_control.evaluations.<field>": <value>}}]
+
+3. To query metrics within evaluations:
+   [{\$unwind: "\$quality_control.evaluations"}, 
+    {\$unwind: "\$quality_control.evaluations.metrics"},
+    {\$match: {"quality_control.evaluations.metrics.name": <metric_name>}}]
+
+4. For aggregating QC statistics:
+   [{\$unwind: "\$quality_control.evaluations"},
+    {\$group: {_id: "\$quality_control.evaluations.modality.abbreviation", count: {\$sum: 1}}}]
+
+Example queries:
+- Find assets with failed quality control evaluations: 
+  {"quality_control.evaluations.latest_status": "Fail"}
+- Find SPIM data with pending QC: 
+  {"quality_control.evaluations": {"\$elemMatch": {"modality.abbreviation": "SPIM", "latest_status": "Pending"}}}
+- Count metrics per evaluation: 
+  {\$project: {"metricCount": {\$size: "\$quality_control.evaluations.metrics"}}}
+
+Modality Reference (Use When Applicable):
+For modality filtering, use the shorthand codes, accessing data_description.modality.abbreviation:
+"EMG", "ISI", "MRI", "SPIM", "behavior", "behavior-videos", "confocal", "ecephys", "fMOST", "fib", "icephys", "merfish", "pophys", "slap"
