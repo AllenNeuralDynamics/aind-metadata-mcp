@@ -1,23 +1,27 @@
 """DocDB retriever class that communicates with MongoDB"""
 
 import logging
-from typing import Any, List, Optional
+from typing import Any, List
 
 from aind_data_access_api.document_db import MetadataDbClient
-from langchain_core.callbacks import CallbackManagerForRetrieverRun
-from langchain_core.documents import Document
 from langchain_core.retrievers import BaseRetriever
 from pydantic import Field
-from langchain_huggingface import HuggingFaceEmbeddings
+#from langchain_huggingface import HuggingFaceEmbeddings
+from sentence_transformers import SentenceTransformer
+
 
 dimensions = 1024
 model_name = "mixedbread-ai/mxbai-embed-large-v1"
 encode_kwargs = {'prompt_name': "query"}
 
-hf = HuggingFaceEmbeddings(
-    model_name=model_name,
-    encode_kwargs=encode_kwargs
-)
+# hf = HuggingFaceEmbeddings(
+#     model_name=model_name,
+#     encode_kwargs=encode_kwargs
+# )
+
+model = SentenceTransformer(model_name, 
+                            truncate_dim=dimensions)
+
 
 
 API_GATEWAY_HOST = "api.allenneuraldynamics-test.org"
@@ -38,7 +42,7 @@ class SchemaContextRetriever(BaseRetriever):
 
     def _get_relevant_documents(
         self, query: str, **kwargs: Any
-    ) -> List[Document]:
+    ) -> List:
         """Synchronous retriever"""
         # For synchronous calls, we need to handle this differently
         # This method should not be used in async contexts
@@ -47,9 +51,7 @@ class SchemaContextRetriever(BaseRetriever):
     async def _aget_relevant_documents(
         self,
         query: str,
-        run_manager: Optional[CallbackManagerForRetrieverRun] = None,
-        **kwargs: Any,
-    ) -> List[Document]:
+    ) -> List:
         """Asynchronous retriever"""
 
         docdb_api_client = MetadataDbClient(
@@ -58,7 +60,10 @@ class SchemaContextRetriever(BaseRetriever):
             collection=self.collection,
         )
 
-        embedded_query = await hf.aembed_query(query)
+        embedded_query = model.encode(query, prompt_name="query").tolist()
+
+
+        #embedded_query = await hf.aembed_query(query)
 
         # Construct aggregation pipeline
         vector_search = {
@@ -95,4 +100,5 @@ class SchemaContextRetriever(BaseRetriever):
 
 # retriever = SchemaContextRetriever(k=4, collection = "data_schema_core_index")
 # documents = asyncio.run(retriever._aget_relevant_documents(query=query))
-# print(documents)
+# for i in documents:
+#     print(type(i))
