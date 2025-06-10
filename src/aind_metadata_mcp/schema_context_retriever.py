@@ -3,31 +3,17 @@
 import logging
 from typing import Any, List, Optional
 
-#import boto3
 from aind_data_access_api.document_db import MetadataDbClient
-#from langchain_aws import BedrockEmbeddings
 from langchain_core.callbacks import CallbackManagerForRetrieverRun
 from langchain_core.documents import Document
 from langchain_core.retrievers import BaseRetriever
 from pydantic import Field
-#from sentence_transformers import SentenceTransformer
 from langchain_huggingface import HuggingFaceEmbeddings
-
-
-
-# BEDROCK_CLIENT = boto3.client(
-#     service_name="bedrock-runtime", region_name="us-west-2"
-# )
-
-# BEDROCK_EMBEDDINGS = BedrockEmbeddings(
-#     model_id="cohere.embed-english-v3", client=BEDROCK_CLIENT
-# )
 
 dimensions = 1024
 model_name = "mixedbread-ai/mxbai-embed-large-v1"
 encode_kwargs = {'prompt_name': "query"}
 
-#model = SentenceTransformer(model_name, truncate_dim=dimensions)
 hf = HuggingFaceEmbeddings(
     model_name=model_name,
     encode_kwargs=encode_kwargs
