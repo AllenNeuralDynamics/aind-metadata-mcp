@@ -10,7 +10,7 @@
 ## Setting up your desktop for installing MCP servers
 
 1. Downloading UV to your desktop
-( Unsure about the necessity of this step but it definitely helps having the package configured locally)
+   ( Unsure about the necessity of this step but it definitely helps having the package configured locally)
 
 - on Mac Terminal
 
@@ -98,3 +98,39 @@ Insert the following lines into the mcpServers dictionary
 - Close and reopen VSCode
 - In Copilot chat -> Select agent mode -> Click the three stacked rectangles to configure tools
 - In order to enable the agent to reply with context of the AIND API, you'll have to manually add the .txt files (under resources) in this repository
+
+### Code Ocean
+
+- Open the postinstall script in the environment of your choice and insert the following lines:
+```bash
+# Step 1: Download and extract code-server
+mkdir -p /.code-server
+curl -L "https://github.com/coder/code-server/releases/download/v4.100.3/code-server-4.100.3-linux-amd64.tar.gz" -o /.code-server/code-server.tar.gz
+
+cd /.code-server
+tar -xvf code-server.tar.gz
+rm code-server.tar.gz
+
+# Step 2: Link binary to /usr/bin
+ln -sf /.code-server/code-server-4.100.3-linux-amd64/bin/code-server /usr/bin/code-server
+
+# Step 3: Install extensions
+mkdir -p /.vscode/extensions
+
+extensions=(
+    "REditorSupport.R"
+    "continue.continue"
+    "ms-python.python"
+    "ms-toolsai.jupyter"
+    "reageyao.bioSyntax"
+    "saoudrizwan.claude-dev"
+)
+
+for ext in "${extensions[@]}"; do
+    code-server --extensions-dir="/.vscode/extensions" --install-extension "$ext"
+done
+
+# install mcp 
+uv tool install aind-metadata-mcp
+```
+- In the VS Code server, open Cline and follow the instructions written above for Cline use in VSCode.
