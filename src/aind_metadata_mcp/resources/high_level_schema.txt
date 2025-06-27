@@ -42,7 +42,7 @@ Metadata/
 │   ├── name: string or null (Name of data, conventionally also the name of the directory)
 │   ├── institution*: object (Organization that collected this data)
 │   ├── funding_source*: array (Funding source. If internal funding, select 'Allen Institute')
-│   ├── data_level*: enum (Level of processing that data has undergone)
+│   ├── data_level*: enum (Level of processing that data has undergone - contains one of these words: [derived, raw, simulated])
 │   ├── group: string or null (A short name for the group of individuals that collected this data)
 │   ├── investigators*: array (Full name(s) of key investigators)
 │   ├── project_name: string or null (A name for a set of coordinated activities)
