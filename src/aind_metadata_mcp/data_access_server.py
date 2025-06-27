@@ -1,8 +1,20 @@
 from pathlib import Path
 from typing import Literal
+import os
 
 from aind_data_access_api.document_db import MetadataDbClient
 from fastmcp import FastMCP
+import boto3
+from urllib.parse import urlparse
+from suffix_trees import STree
+from hdmf_zarr import NWBZarrIO
+
+try:
+    from codeocean import CodeOcean
+    from codeocean.data_asset import DataAssetAttachParams
+    HAS_CODE_OCEAN = True
+except ImportError:
+    HAS_CODE_OCEAN  = False
 
 from aind_metadata_mcp.schema_context_retriever import SchemaContextRetriever
 
@@ -252,6 +264,87 @@ async def retrieve_schema_context(
     retriever = SchemaContextRetriever(k=4, collection=collection)
     documents = await retriever._aget_relevant_documents(query=query)
     return documents
+
+@mcp.tool()
+def attach_co_data_assets(co_links: list):
+    """
+    Attatch data assets to code ocean capsule using a list of external links,
+    which can be found in the metadata -> 'external_links.Code Ocean'
+
+    Parameters
+    ----------
+    co_links : list
+        List of code ocean external links
+
+    Returns
+    -------
+    List of DataAssetAttachResults, to determine successful attachment of assets
+    """
+
+    if not HAS_CODE_OCEAN :
+        raise ImportError(
+            "In order to use Code Ocean functionality, ensure that you're on Code Ocean."
+            "Install with: uv tool install aind-metadata-mcp[co]"
+        )
+
+    CO_DOMAIN = "https://codeocean.allenneuraldynamics.org"
+    co_client = CodeOcean(domain=CO_DOMAIN, token=os.getenv('CO_TOKEN')) 
+
+    all_data_asset_attach_params = [
+        DataAssetAttachParams(id=co_id) for co_id in co_links
+    ]
+
+    co_capsule_id = os.getenv('CO_CAPSULE_ID')
+    response = co_client.capsules.attach_data_assets(
+        capsule_id=co_capsule_id,
+        attach_params=all_data_asset_attach_params,
+    )
+
+    return response
+
+
+@mcp.tool()
+def identify_nwb_contents(s3_link):
+    """
+    Identifies the NWB folder in the given S3 link and opens it as a NWBZarrIO object.
+
+    Parameters:
+        s3_link (str): The S3 link to the folder or file.
+
+    Returns:
+        list: List of contents in NWB folder if found, otherwise None.
+    """
+    # Parse the S3 link
+    parsed_url = urlparse(s3_link)
+    bucket_name = parsed_url.netloc
+    prefix = parsed_url.path.lstrip('/')
+
+    # Initialize S3 client
+    s3 = boto3.client('s3')
+
+    try:
+        # List objects in the given S3 path
+        response = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
+
+        if 'Contents' in response:
+            list_nwb_files = []
+            for obj in response['Contents']:
+                directory_name = obj['Key']
+                if "nwb" in directory_name.lower():
+                    list_nwb_files.append(directory_name)
+        # Identifying common substring in all nwb files (should be the nwb folder)            
+        s3_nwb_folder = STree.STree(list_nwb_files).lcs()
+        s3_link_to_nwb = f"s3://{bucket_name}/{s3_nwb_folder}"
+        # Opening s3 link to nwb folder as an nwb object 
+        with NWBZarrIO(str(s3_link_to_nwb), 'r') as io:
+            nwbfile = io.read() # type pynwb.file.NWBFile
+            file_contents = nwbfile.all_children() # return nwbfile.allchildren() list contents as a list
+            print('Loaded NWB file from:', s3_link_to_nwb)
+        return file_contents
+    except Exception as e:
+        #print(f"Error accessing S3: {e}")
+        return None
+
 
 
 @mcp.resource("resource://aind_api")
