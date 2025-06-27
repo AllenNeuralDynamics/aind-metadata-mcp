@@ -102,6 +102,7 @@ Insert the following lines into the mcpServers dictionary
 ### Code Ocean
 
 - Open the postinstall script in the environment of your choice and insert the following lines:
+
 ```bash
 # Step 1: Download and extract code-server
 mkdir -p /.code-server
@@ -131,6 +132,24 @@ for ext in "${extensions[@]}"; do
 done
 
 # install mcp 
-uv tool install aind-metadata-mcp
+uv tool install --force "git+https://github.com/AllenNeuralDynamics/aind-metadata-mcp.git@test[co]"
 ```
-- In the VS Code server, open Cline and follow the instructions written above for Cline use in VSCode.
+
+- In the VS Code server, open Cline and attach the following to the json file:
+
+```json
+{
+  "mcpServers": {
+    "aind_data_access":{
+  
+      "command": "uvx",
+      "args":["aind-metadata-mcp[co]"],
+       "env": {
+        "CO_TOKEN": "<CO_TOKEN>",
+        "CO_CAPSULE_ID": "<CAPSULE ID>" // can be found by running `env | grep -i capsule` in the terminal
+      }
+    }
+  
+  }
+}
+```
