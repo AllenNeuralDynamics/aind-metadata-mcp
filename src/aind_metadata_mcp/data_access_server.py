@@ -431,6 +431,16 @@ def get_aind_data_access_api() -> str:
         file_content = file.read()
     return file_content
 
+@mcp.resource("resource://load_nwbfile")
+def get_nwbfile_download_script() -> str:
+    """
+    Get context on how to return an NWBfile from the /data folder in current repository
+    """
+    resource_path = Path(__file__).parent / "resources" / "load_nwbfile.txt"
+    with open(resource_path, "r") as file:
+        file_content = file.read()
+    return file_content
+
 
 @mcp.resource("resource://high_level_schema")
 def get_high_level_schema() -> str:
