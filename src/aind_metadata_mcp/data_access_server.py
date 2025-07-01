@@ -277,6 +277,7 @@ async def retrieve_schema_context(
     documents = await retriever._aget_relevant_documents(query=query)
     return documents
 
+@mcp.tool()
 def attach_co_data_assets(co_links: list):
     """
     Attatch data assets to code ocean capsule using a list of external links,
@@ -314,6 +315,7 @@ def attach_co_data_assets(co_links: list):
 
     return response
 
+@mcp.tool()
 def identify_nwb_contents_in_code_ocean(subject_id, date):
     """
     Searches the /data directory in a code ocean repository for a folder 
@@ -327,6 +329,13 @@ def identify_nwb_contents_in_code_ocean(subject_id, date):
     Returns:
     - nwbfile: Loaded NWBFile object if found, else None
     """
+
+    if not HAS_CODE_OCEAN:
+        raise ImportError(
+            "In order to use Code Ocean functionality, "
+            "ensure that you're on Code Ocean."
+            "Install with: uv tool install aind-metadata-mcp[co]"
+        )
 
     # Create pattern for matching
     pattern = rf".*{subject_id}.*{date}.*"
@@ -363,10 +372,6 @@ def identify_nwb_contents_in_code_ocean(subject_id, date):
     except Exception as e:
         #print(f'Error loading file from {nwb_path}: {e}')
         return None
-    
-if HAS_CODE_OCEAN:
-    mcp.tool()(attach_co_data_assets)
-    mcp.tool()(identify_nwb_contents_in_code_ocean)
 
 
 @mcp.tool()
