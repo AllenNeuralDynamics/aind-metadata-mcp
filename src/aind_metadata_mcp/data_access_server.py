@@ -368,7 +368,7 @@ def identify_nwb_contents_in_code_ocean(subject_id, date):
         with NWBZarrIO(str(nwb_path), 'r') as io:
             nwbfile = io.read()
             #print('Loaded NWB file from:', nwb_path)
-            return nwbfile # combination of files in data/asset/asset_nwb
+            return nwbfile.all_children() # combination of files in data/asset/asset_nwb
     except Exception as e:
         #print(f'Error loading file from {nwb_path}: {e}')
         return None
