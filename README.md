@@ -101,6 +101,8 @@ Insert the following lines into the mcpServers dictionary
 
 ### Code Ocean
 
+- Generate a Code Ocean api token called "CO_TOKEN" with read/write permissions for the capsule and read permission for the datasets.
+Attatch CO_TOKEN as an env variable in the capsule of your choice
 - Open the postinstall script in the environment of your choice and insert the following lines:
 
 ```bash
