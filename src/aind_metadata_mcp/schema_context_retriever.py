@@ -6,22 +6,20 @@ from typing import Any, List
 from aind_data_access_api.document_db import MetadataDbClient
 from langchain_core.retrievers import BaseRetriever
 from pydantic import Field
-#from langchain_huggingface import HuggingFaceEmbeddings
-from sentence_transformers import SentenceTransformer
 
+# from langchain_huggingface import HuggingFaceEmbeddings
+from sentence_transformers import SentenceTransformer
 
 dimensions = 1024
 model_name = "mixedbread-ai/mxbai-embed-large-v1"
-encode_kwargs = {'prompt_name': "query"}
+encode_kwargs = {"prompt_name": "query"}
 
 # hf = HuggingFaceEmbeddings(
 #     model_name=model_name,
 #     encode_kwargs=encode_kwargs
 # )
 
-model = SentenceTransformer(model_name, 
-                            truncate_dim=dimensions)
-
+model = SentenceTransformer(model_name, truncate_dim=dimensions)
 
 
 API_GATEWAY_HOST = "api.allenneuraldynamics-test.org"
@@ -40,13 +38,13 @@ class SchemaContextRetriever(BaseRetriever):
     k: int = Field(default=5, description="Number of documents to retrieve")
     collection: str = Field(description="MongoDB collection to retrieve from")
 
-    def _get_relevant_documents(
-        self, query: str, **kwargs: Any
-    ) -> List:
+    def _get_relevant_documents(self, query: str, **kwargs: Any) -> List:
         """Synchronous retriever"""
         # For synchronous calls, we need to handle this differently
         # This method should not be used in async contexts
-        raise NotImplementedError("Use _aget_relevant_documents for async contexts")
+        raise NotImplementedError(
+            "Use _aget_relevant_documents for async contexts"
+        )
 
     async def _aget_relevant_documents(
         self,
@@ -62,8 +60,7 @@ class SchemaContextRetriever(BaseRetriever):
 
         embedded_query = model.encode(query, prompt_name="query").tolist()
 
-
-        #embedded_query = await hf.aembed_query(query)
+        # embedded_query = await hf.aembed_query(query)
 
         # Construct aggregation pipeline
         vector_search = {
@@ -88,17 +85,17 @@ class SchemaContextRetriever(BaseRetriever):
                 pipeline=pipeline
             )
 
-
             return result
 
         except Exception as e:
             print(e)
 
+
 # import asyncio
 # query = "subject procedures"
 
 
-# retriever = SchemaContextRetriever(k=4, collection = "data_schema_core_index")
+# retriever = SchemaContextRetriever(k=4, collection="data_schema_core_index")
 # documents = asyncio.run(retriever._aget_relevant_documents(query=query))
 # for i in documents:
 #     print(type(i))
