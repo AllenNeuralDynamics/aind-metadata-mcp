@@ -387,11 +387,10 @@ def get_aind_data_access_api() -> str:
     return file_content
 
 
-@mcp.resource("resource://attach_code_ocean_data_asset")
+@mcp.resource("resource://attach_code_ocean_data_assets")
 def attach_code_ocean_data_asset() -> str:
     """
-    Get context on how to use the AIND data access api to show users how to
-    wrap tool calls
+    Get context on how to attach code ocean data assets
     """
     resource_path = Path(__file__).parent / "resources" / "attach_code_ocean_data_assets.txt"
     with open(resource_path, "r") as file:
