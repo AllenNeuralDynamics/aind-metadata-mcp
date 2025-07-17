@@ -31,7 +31,7 @@ def setup_mongodb_client():
 @mcp.tool()
 def get_records(
     filter: dict = {}, projection: dict = {}, limit: int = 5
-) -> dict:
+    ):
     """
     Retrieves documents from MongoDB database using simple filters
     and projections.
@@ -393,7 +393,7 @@ def attach_code_ocean_data_asset() -> str:
     Get context on how to use the AIND data access api to show users how to
     wrap tool calls
     """
-    resource_path = Path(__file__).parent / "resources" / "attach_code_ocean_data_asset.txt"
+    resource_path = Path(__file__).parent / "resources" / "attach_code_ocean_data_assets.txt"
     with open(resource_path, "r") as file:
         file_content = file.read()
     return file_content
