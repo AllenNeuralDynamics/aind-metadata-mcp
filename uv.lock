@@ -36,9 +36,6 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-co = [
-    { name = "codeocean" },
-]
 dev = [
     { name = "black" },
     { name = "coverage" },

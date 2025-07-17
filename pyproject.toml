@@ -37,10 +37,6 @@ dev = [
     'furo'
 ]
 
-co = [
-    'codeocean',
-]
-
 [project.scripts]
 aind-metadata-mcp = "aind_metadata_mcp.data_access_server:main"
 
