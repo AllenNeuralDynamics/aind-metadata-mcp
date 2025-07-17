@@ -10,14 +10,6 @@ from fastmcp import FastMCP
 from hdmf_zarr import NWBZarrIO
 from suffix_trees import STree
 
-try:
-    from codeocean import CodeOcean
-    from codeocean.data_asset import DataAssetAttachParams
-
-    HAS_CODE_OCEAN = True
-except ImportError:
-    HAS_CODE_OCEAN = False
-
 from aind_metadata_mcp.schema_context_retriever import SchemaContextRetriever
 
 mcp = FastMCP("aind_data_access")
@@ -277,43 +269,6 @@ async def retrieve_schema_context(
     documents = await retriever._aget_relevant_documents(query=query)
     return documents
 
-@mcp.tool()
-def attach_co_data_assets(co_links: list):
-    """
-    Attatch data assets to code ocean capsule using a list of external links,
-    which can be found in the metadata -> 'external_links.Code Ocean'
-
-    Parameters
-    ----------
-    co_links : list
-        List of code ocean external links
-
-    Returns
-    -------
-    List of DataAssetAttachResults to determine successful attachment of assets
-    """
-
-    if not HAS_CODE_OCEAN:
-        raise ImportError(
-            "In order to use Code Ocean functionality, "
-            "ensure that you're on Code Ocean."
-            "Install with: uv tool install aind-metadata-mcp[co]"
-        )
-
-    CO_DOMAIN = "https://codeocean.allenneuraldynamics.org"
-    co_client = CodeOcean(domain=CO_DOMAIN, token=os.getenv("CO_TOKEN"))
-
-    all_data_asset_attach_params = [
-        DataAssetAttachParams(id=co_id) for co_id in co_links
-    ]
-
-    co_capsule_id = os.getenv("CO_CAPSULE_ID")
-    response = co_client.capsules.attach_data_assets(
-        capsule_id=co_capsule_id,
-        attach_params=all_data_asset_attach_params,
-    )
-
-    return response
 
 @mcp.tool()
 def identify_nwb_contents_in_code_ocean(subject_id, date):
@@ -430,6 +385,19 @@ def get_aind_data_access_api() -> str:
     with open(resource_path, "r") as file:
         file_content = file.read()
     return file_content
+
+
+@mcp.resource("resource://attach_code_ocean_data_asset")
+def attach_code_ocean_data_asset() -> str:
+    """
+    Get context on how to use the AIND data access api to show users how to
+    wrap tool calls
+    """
+    resource_path = Path(__file__).parent / "resources" / "attach_code_ocean_data_asset.txt"
+    with open(resource_path, "r") as file:
+        file_content = file.read()
+    return file_content
+
 
 @mcp.resource("resource://load_nwbfile")
 def get_nwbfile_download_script() -> str:
