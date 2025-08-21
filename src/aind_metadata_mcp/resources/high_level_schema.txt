@@ -1514,6 +1514,8 @@ There are several miscellaneous top level fields which are represented here:
     }
 These can just be accessed by the field name.
 
+When working in code ocean, ensure that you're pulling the external_links.Code Ocean field. If your task is to attach an asset to a capsule, you will need this field.
+
 The quality_control schema defines how quality metrics are organized and evaluated for data assets:
 
 - Each data asset has an array of "evaluations"
