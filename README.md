@@ -109,59 +109,8 @@ Note that after configuring the JSON files, it will take a few minutes for the s
 - In Copilot chat -> Select agent mode -> Click the three stacked rectangles to configure tools
 - In order to enable the agent to reply with context of the AIND API, you'll have to manually add the .txt files (under resources) in this repository
 
-### Code Ocean
+### For use in Code Ocean
 
-- Generate a Code Ocean api token called "CO_TOKEN" with read/write permissions for the capsule and read permission for the datasets.
-Attatch CO_TOKEN as an env variable in the capsule of your choice
-- Open the postinstall script in the environment of your choice and insert the following lines:
-
-```bash
-# Step 1: Download and extract code-server
-mkdir -p /.code-server
-curl -L "https://github.com/coder/code-server/releases/download/v4.100.3/code-server-4.100.3-linux-amd64.tar.gz" -o /.code-server/code-server.tar.gz
-
-cd /.code-server
-tar -xvf code-server.tar.gz
-rm code-server.tar.gz
-
-# Step 2: Link binary to /usr/bin
-ln -sf /.code-server/code-server-4.100.3-linux-amd64/bin/code-server /usr/bin/code-server
-
-# Step 3: Install extensions
-mkdir -p /.vscode/extensions
-
-extensions=(
-    "REditorSupport.R"
-    "continue.continue"
-    "ms-python.python"
-    "ms-toolsai.jupyter"
-    "reageyao.bioSyntax"
-    "saoudrizwan.claude-dev"
-)
-
-for ext in "${extensions[@]}"; do
-    code-server --extensions-dir="/.vscode/extensions" --install-extension "$ext"
-done
-
-# install mcp 
-uv tool install --force "git+https://github.com/AllenNeuralDynamics/aind-metadata-mcp.git@test[co]"
-```
-
-- In the VS Code server, open Cline and attach the following to the json file:
-
-```json
-{
-  "mcpServers": {
-    "aind_data_access":{
-  
-      "command": "uvx",
-      "args":["aind-metadata-mcp[co]"],
-       "env": {
-        "CO_TOKEN": "<CO_TOKEN>",
-        "CO_CAPSULE_ID": "<CAPSULE ID>" // can be found by running `env | grep -i capsule` in the terminal
-      }
-    }
-  
-  }
-}
-```
+* Locate the [following capsule](https://codeocean.allenneuraldynamics.org/capsule/7008682/tree), to spin up Cline and Co-pilot with the aind-metadata-mcp pre-installed.
+* Refer the the [code ocean MCP server](https://github.com/codeocean/codeocean-mcp-server) for additional support
+* Either pin version 4.2, or 4.4
