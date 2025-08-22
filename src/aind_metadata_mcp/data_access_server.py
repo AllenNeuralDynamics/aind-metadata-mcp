@@ -10,7 +10,7 @@ from fastmcp import FastMCP
 from hdmf_zarr import NWBZarrIO
 from suffix_trees import STree
 
-from aind_metadata_mcp.schema_context_retriever import SchemaContextRetriever
+# from aind_metadata_mcp.schema_context_retriever import SchemaContextRetriever
 
 mcp = FastMCP("aind_data_access")
 
