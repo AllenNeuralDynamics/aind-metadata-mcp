@@ -1,5 +1,12 @@
 # AIND Metadata MCP Server
 
+[![License](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
+![Code Style](https://img.shields.io/badge/code%20style-black-black)
+[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
+![Interrogate](https://img.shields.io/badge/interrogate-94.4%25-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?logo=codecov)
+![Python](https://img.shields.io/badge/python->=3.11-blue?logo=python)
+
 An MCP (Model Context Protocol) server that provides access to AIND (Allen Institute for Neural Dynamics) metadata and data assets through a comprehensive set of tools and resources.
 
 ## Features
@@ -32,11 +39,11 @@ pip install aind-metadata-mcp
 
 ### For Cline (VSCode Extension)
 
-
 In order to ensure that the MCP server runs in your preferred client, you will have to download the `aind-metadata-mcp` package to your console. If space is an issue, please set `UV_CACHE_DIR` and `UV_TOOL_DIR` to locations that have capacity before proceeding with the next step.
 
 1. Simpler version of install
-   Run `uv tool install aind-metadata-mcp` on your terminal and proceed below to configuring your MCP clients. 
+   Run `uv tool install aind-metadata-mcp` on your terminal and proceed below to configuring your MCP clients.
+
 2. If the above step didn't work:
 
 Create virtual environment with python 3.11 in IDE
@@ -116,4 +123,4 @@ Note that after configuring the JSON files, it will take a few minutes for the s
 
 * Locate the [following capsule](https://codeocean.allenneuraldynamics.org/capsule/7008682/tree), to spin up Cline and Co-pilot with the aind-metadata-mcp pre-installed.
 * Refer the the [code ocean MCP server](https://github.com/codeocean/codeocean-mcp-server) for additional support
-* Either pin version 4.2, or 4.4
+* Either pin version 4.2, or 4.5
