@@ -1969,5 +1969,10 @@ def get_nwbfile_download_script() -> str:
     return file_content
 
 
-if __name__ == "__main__":
+def main():
+    """Main entry point for the MCP server."""
     mcp.run(transport="stdio")
+
+
+if __name__ == "__main__":
+    main()
