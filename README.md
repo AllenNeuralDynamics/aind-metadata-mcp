@@ -43,6 +43,7 @@ In order to ensure that the MCP server runs in your preferred client, you will h
 
 1. Simpler version of install
    Run `uv tool install aind-metadata-mcp` on your terminal and proceed below to configuring your MCP clients.
+
 2. If the above step didn't work:
 
 Create virtual environment with python 3.11 in IDE
