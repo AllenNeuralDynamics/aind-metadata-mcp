@@ -1,40 +1,42 @@
-# AIND Metadata access MCP server
+# AIND Metadata MCP Server
 
-[![License](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
-![Code Style](https://img.shields.io/badge/code%20style-black-black)
-[![semantic-release: angular](https://img.shields.io/badge/semantic--release-angular-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
-![Interrogate](https://img.shields.io/badge/interrogate-94.1%25-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen?logo=codecov)
-![Python](https://img.shields.io/badge/python->=3.11-blue?logo=python)
+An MCP (Model Context Protocol) server that provides access to AIND (Allen Institute for Neural Dynamics) metadata and data assets through a comprehensive set of tools and resources.
 
-## Server Overview
+## Features
 
-The AIND metadata MCP allows users to access and communicate with the metadata within their preferred IDE. This server consists of tools that allows an LLM agent to access records in DocDB, as well as provide the user context with how the AIND Data Schema is structured. It also consists of resources to give the model additional context on how to structure responses using the `aind-data-access` API, as well as, how the schema is structured. Note that due to the nature of MCP servers, users will have to explicitly ask the agent to use the available resources for additional context.
+This MCP server provides tools for:
 
-## Setting up your desktop for installing MCP servers
+- **Data Retrieval**: Query MongoDB collections with filters and projections
+- **Aggregation**: Execute complex MongoDB aggregation pipelines
+- **Schema Exploration**: Access detailed schema examples and documentation
+- **NWB File Access**: Load and explore NWB (Neurodata Without Borders) files
+- **Data Summaries**: Generate AI-powered summaries of data assets
 
-1. Downloading UV to your desktop
-   ( Unsure about the necessity of this step but it definitely helps having the package configured locally)
+## Installation
 
-- on Mac Terminal
+Install uv if you haven't already - following [this documentation](https://docs.astral.sh/uv/getting-started/installation/)
 
-```bash
-brew install uv
-
-# Or, alternatively:
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
-
-- on Windows Powershell
+Install the MCP server using uv:
 
 ```bash
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+uv tool install aind-metadata-mcp
 ```
 
-In order to ensure that the MCP server runs in your preferred client, you will have to download the `aind-metadata-mcp` package to your console. However, note that the installation is quite large. If space is an issue, please set `UV_CACHE_DIR` and `UV_TOOL_DIR` to locations that have capacity before proceeding with the next step.
+Or using pip:
+
+```bash
+pip install aind-metadata-mcp
+```
+
+## Configuration
+
+### For Cline (VSCode Extension)
+
+
+In order to ensure that the MCP server runs in your preferred client, you will have to download the `aind-metadata-mcp` package to your console. If space is an issue, please set `UV_CACHE_DIR` and `UV_TOOL_DIR` to locations that have capacity before proceeding with the next step.
 
 1. Simpler version of install
-   Run `uv tool install aind-metadata-mcp` on your terminal and proceed below to configuring your MCP clients. The `uvx` command should ideally take 3 minutes to start up without errors.
+   Run `uv tool install aind-metadata-mcp` on your terminal and proceed below to configuring your MCP clients. 
 2. If the above step didn't work:
 
 Create virtual environment with python 3.11 in IDE
@@ -52,7 +54,7 @@ py -3.11 -m venv .venv
 source .venv/bin/activate 
 ```
 
-Run the following commands in your IDE terminal. The `uvx` command should ideally take 3 minutes to start up without errors.
+Run the following commands in your IDE terminal.
 
 ```bash
 pip install uv
@@ -78,10 +80,11 @@ Insert the following lines into the mcpServers dictionary
 ```bash
 
 "aind_data_access": {
-    "command": "uvx",
-    "args": ["aind-metadata-mcp"]
+      "disabled": false,
+      "timeout": 300,
+      "type": "stdio",
+      "command": "aind-metadata-mcp"
 }
-
 ```
 
 Note that after configuring the JSON files, it will take a few minutes for the serve to populate in the client.
