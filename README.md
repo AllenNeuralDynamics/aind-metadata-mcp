@@ -70,6 +70,41 @@ uvx aind-metadata-mcp
 
 If all goes well, and you see the following notice - `Starting MCP server 'aind_data_access' with transport 'stdio'`-, you should be good for the set up in your client of choice!
 
+### Cursor IDE
+
+1. Install the MCP server:
+   ```bash
+   uv tool install aind-metadata-mcp
+   ```
+
+2. Create the MCP configuration file:
+   ```bash
+   mkdir -p ~/.cursor
+   ```
+
+3. Create `~/.cursor/mcp.json` with the following content:
+   ```json
+   {
+     "mcpServers": {
+       "aind-data-access": {
+         "command": "aind-metadata-mcp",
+         "args": [],
+         "env": {}
+       }
+     }
+   }
+   ```
+
+4. **Important**: Replace `aind-metadata-mcp` with the full path if needed:
+   ```bash
+   which aind-metadata-mcp
+   ```
+   Use the full path (e.g., `/Users/username/.local/bin/aind-metadata-mcp`) in the `command` field.
+
+5. Restart Cursor completely (Cmd+Q then reopen)
+
+**Note**: Cursor uses a different MCP configuration system than VSCode. The configuration must be in `~/.cursor/mcp.json`, not in the main settings.json file.
+
 ## Instructions for use in MCP clients
 
 JSON Config files to add MCP servers in clients should be structured like this
