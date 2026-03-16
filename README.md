@@ -9,6 +9,10 @@
 
 An MCP (Model Context Protocol) server that provides access to AIND (Allen Institute for Neural Dynamics) metadata and data assets through a comprehensive set of tools and resources.
 
+> [!WARNING]
+> This MCP server is deprecated. You can continue using it to access V1 metadata.  
+> For V2 metadata, please see [aind-data-mcp](https://github.com/AllenNeuralDynamics/aind-data-mcp/).
+
 ## Features
 
 This MCP server provides tools for:
