@@ -1,3 +1,6 @@
+# Archive Notice
+This repo is being archived.
+
 # AIND Metadata MCP Server
 
 [![License](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
